@@ -24,3 +24,31 @@ k3s_agent: true
 For selecting master server to connect, you can use ```k3s_master_ip``` variable.
 By default it will be set to first ansible_host in ansible group specified in ```k3s_master_group``` variable.  
 Of course, you can always redefine it manually.
+
+```yaml
+- name: k3s multi node - master
+  hosts: k3s_master
+  become: yes
+  become_user: root
+  gather_facts: False
+  roles:
+    - role: k3s
+  vars:
+    k3s_master: true
+    k3s_kubeconfig: true
+    k3s_master_extra_args:
+      - "--token alskdfjasljkfdlasjflakjsdflkj"
+
+- name: k3s multi node - agent
+  hosts: k3s_agent
+  become: yes
+  become_user: root
+  gather_facts: False
+  roles:
+    - role: k3s
+  vars:
+    k3s_agent: true
+    k3s_agent_extra_args:
+      - "--server https://kube-master-1.example.org:6443"
+      - "--token alskdfjasljkfdlasjflakjsdflkj"
+```
