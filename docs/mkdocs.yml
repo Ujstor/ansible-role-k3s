@@ -1,0 +1,48 @@
+site_name: K3s Ansinle Playbook
+site_description: Docs
+
+repo_url: https://git.dc.nuv.ntxzone.local/as/k3s-cluster-ansible/
+edit_uri: edit/main/docs/docs
+
+theme:
+  name: material
+  theme:
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.footer
+    - toc.flow
+  palette: 
+    - scheme: default
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+nav:
+  - Home: index.md
+  - Quick Start:
+      - Basic: install/basics.md
+      - Multi Master: install/multi_master.md
+      - Airgapped Install: install/airgapped_install.md
+      - Getting Kubeconfig: install/getting-kubeconfig.md
+  - Configuration:
+      - Kubelet Arguments: advanced-configuration/setting-kubelet-arguments.md
+      - Sysctl Settings: advanced-configuration/setting-sysctl.md
+      - External and Internal IP Configuration: advanced-configuration/specifying-ip.md
+  - Advanced Runtime Configurations:
+      - Gvisor Setup: advanced-configuration/gvisor.md
+      - Containerd Template: advanced-configuration/containerd-template.md
+      - Custom CNI: advanced-configuration/custom-cni.md
+  - Additional Resources:
+      - Additional K8s Configs: advanced-configuration/additional-k8s-configs.md
+      - Additional Packages and Services: advanced-configuration/additional-packages-and-services.md
+      - Custom Manifests: advanced-configuration/custom-manifests.md
+      - Custom Registries: advanced-configuration/custom-registries.md
+      - External Cloud Controller: advanced-configuration/external-cloud-controller.md
+
+extra:
+    generator: false

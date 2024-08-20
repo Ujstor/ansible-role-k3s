@@ -1,4 +1,3 @@
-# Basic installation
 This role discovers installation mode from your ansible inventory. 
 For working with your inventory, it operates on two basic variables,  ```k3s_master_group``` and ```k3s_agent_group```, which are set to ```k3s_master``` and ```k3s_agent``` by default.
 

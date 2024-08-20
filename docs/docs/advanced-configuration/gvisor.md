@@ -1,4 +1,3 @@
-# Installation and usage
 By setting k3s_gvisor to true role will install gvisor - google's application kernel for container.<br> 
 By default it will use systrap mode, to switch it to kvm set k3s_gvisor_platform to kvm.<br>
 If platform will be set to kvm, role will also load (and persist) corresponding module into kernel.<br>
@@ -23,3 +22,16 @@ spec:
     - name: nginx
       image: nginx
 ```
+## Additional configuration
+Role supports passing additional settings for gvisor using ```k3s_gvisor_config```. For example, to enable host networking, use:
+```yaml
+k3s_gvisor_config:
+  network: host
+```
+Which will become
+```toml
+[runsc_config]
+  network = "host"
+```
+in gvisor config
+
