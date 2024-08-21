@@ -62,13 +62,12 @@ Host configuration is pulled from `hosts.ini`.
 ```bash
 ansible-playbook k3s_playbook.yml
 ```
-
 ## 4. Variables
 [Back to Top](#table-of-contents)
 
 | Variable name                  | Default value                        | Description                                                                                                                          |
 | ------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| k3s_version                    | `v1.29.3+k3s1`                       | version of k3s to install                                                                                                            |
+| k3s_version                    | `v1.30.3+k3s1`                       | version of k3s to install                                                                                                            |
 | k3s_systemd_dir                | /etc/systemd/system                  | Directory for systemd unit file                                                                                                      |
 | k3s_master                     | `false`                              | installs k3s master when true                                                                                                        |
 | k3s_agent                      | `false`                              | installs k3s agent when true                                                                                                         |
@@ -89,7 +88,7 @@ ansible-playbook k3s_playbook.yml
 | k3s_registries                 | ``                                   | Configures custom registries, see [official docs](https://rancher.com/docs/k3s/latest/en/installation/private-registry/) for format  |
 | k3s_cronjob_prune_images       | `absent`                             | Configures cronjob that prunes unused images in containerd daily. Either `absent` or `present`                                       |
 | k3s_gvisor                     | `false`                              | Installs [gvisor](https://gvisor.dev)                                                                                                |
-| k3s_gvisor_version             | `20231218`                           | gvisor version to install                                                                                                            |
+| k3s_gvisor_version             | `20240807`                           | gvisor version to install                                                                                                            |
 | k3s_gvisor_platform            | `systrap`                            | Selects [platform](https://gvisor.dev/docs/architecture_guide/platforms/) to use in gvisor                                           |
 | k3s_gvisor_config              | ``                                   | Sets additional options for gvisor runsc. See notes                                                                                  |
 | k3s_gvisor_create_runtimeclass | `true`                               | Automatically create gvisor RuntimeClass in kubernetes                                                                               |
