@@ -1,0 +1,14 @@
+- name: k3s single node
+  hosts: all
+  become: yes
+  become_user: root
+  gather_facts: False
+  roles:
+    - role: k3s
+  vars:
+    k3s_master: true
+    k3s_agent: false
+    k3s_kubeconfig: true
+    k3s_kubeconfig_context: k3s
+    k3s_master_extra_args:
+      - metrics-server

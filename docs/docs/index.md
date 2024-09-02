@@ -45,13 +45,13 @@ Also, if you SSH into servers as a non-root user, you will need to define the us
 
 ```yaml
 [k3s_master]
-138.201.118.66 ansible_ssh_private_key_file: ~/.ssh/k3d_ansible_rsa ansible_user: administrator
+138.201.118.66 ansible_ssh_private_key_file: ~/.ssh/k3s_ansible_rsa ansible_user: administrator
 ```
 
 A better approach is to have the same SSH key for the entire cluster.
 
 ```yaml
-private_key_file = ~/.ssh/k3d_ansible_rsa
+private_key_file = ~/.ssh/k3s_ansible_rsa
 ```
 
 ## 3. Run Playbooks
@@ -62,6 +62,7 @@ Host configuration is pulled from `hosts.ini`.
 ```bash
 ansible-playbook k3s_playbook.yml
 ```
+
 ## 4. Variables
 [Back to Top](#table-of-contents)
 

@@ -1,0 +1,56 @@
+image: python:3.10
+
+variables:
+  PYTHON_VERSION: "3.x"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  DOCS_DIR: "docs"
+  SITE_DIR: "site"
+
+cache:
+  paths:
+    - .cache/pip
+
+before_script:
+  - pip install mkdocs==1.5.3 mkdocs-material==9.5.15
+
+stages:
+  - build
+  - deploy
+  - lint
+
+build:
+  stage: build
+  script:
+    - mkdocs build --config-file $DOCS_DIR/mkdocs.yml --site-dir $CI_PROJECT_DIR/$SITE_DIR
+  artifacts:
+    paths:
+      - $SITE_DIR
+    expire_in: 1 hour
+
+pages:
+  stage: deploy
+  script:
+    - mv $SITE_DIR public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
+yaml_lint:
+  stage: lint
+  image: python:3.10
+  before_script:
+    - apt-get update -y && apt-get install -y yamllint
+  script:
+    - yamllint .
+
+ansible_lint:
+  stage: lint
+  image: python:3.10
+  before_script:
+    - pip install ansible-lint
+  script:
+    - ansible-lint .
+
+

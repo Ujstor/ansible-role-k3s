@@ -1,0 +1,44 @@
+---
+- name: Deploy and execute K3s cleanup scripts
+  hosts: all
+  become: yes
+  tasks:
+    - name: Copy killall script to all nodes
+      copy:
+        src: ./scripts/k3s-killall.sh
+        dest: /usr/local/bin/k3s-killall.sh
+        mode: '0755'
+
+    - name: Copy uninstall script to master nodes
+      when: "'k3s_master' in group_names"
+      copy:
+        src: ./scripts/k3s-uninstall.sh
+        dest: /usr/local/bin/k3s-uninstall.sh
+        mode: '0755'
+
+    - name: Copy uninstall script to agent nodes
+      when: "'k3s_agent' in group_names"
+      copy:
+        src: ./scripts/k3s-agent-uninstall.sh
+        dest: /usr/local/bin/k3s-agent-uninstall.sh
+        mode: '0755'
+
+    - name: Run uninstall script on master nodes
+      when: "'k3s_master' in group_names"
+      command: /usr/local/bin/k3s-uninstall.sh
+      register: master_uninstall_output
+
+    - name: Display master uninstall output
+      when: "'k3s_master' in group_names"
+      debug:
+        var: master_uninstall_output.stdout
+
+    - name: Run uninstall script on agent nodes
+      when: "'k3s_agent' in group_names and inventory_hostname in groups['k3s_agent']"
+      command: /usr/local/bin/k3s-agent-uninstall.sh
+      register: agent_uninstall_output
+
+    - name: Display agent uninstall output
+      when: "'k3s_agent' in group_names and inventory_hostname in groups['k3s_agent']"
+      debug:
+        var: agent_uninstall_output.stdout

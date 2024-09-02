@@ -1,34 +1,78 @@
-<!-- TOC -->
+# K3s Ansible Role
 
-- [Description](#description)
-- [Documentation](#documentation)
-- [Requirements](#requirements)
-- [Variables](#variables)
-- [Changelog](#changelog)
-- [Tests](#tests)
-- [Other ansible roles to check out](#other-ansible-roles-to-check-out)
+Ansible role for managing rancher [k3s](https://k3s.io), lightweight, cncf-certified kubernetes distribution.
+This role can be used to install simple single-node or multi-master HA clusters.
+It can be used to manage multiple k3s clusters in single ansible inventory.
+It's also heavily customizable for almost any purpose - you can edit pretty much any k3s setting.
+It can install gvisor, additional host dependencies, load specific kernel modules, adjust k3s-related sysctl settings and so on.
 
-<!-- /TOC -->
+Apart from [what k3s requires](https://rancher.com/docs/k3s/latest/en/installation/installation-requirements/), this role also needs systemd, so it should work on any modern distro.
 
-
-### Description
-Ansible role for managing rancher [k3s](https://k3s.io), lightweight, cncf-certified kubernetes distribution.  
-This role can be used to install simple single-node or multi-master HA clusters.  
-It can be used to manage multiple k3s clusters in single ansible inventory.  
-It's also heavily customizable for almost any purpose - you can edit pretty much any k3s setting.  
-It can install gvisor, additional host dependencies, load specific kernel modules, adjust k3s-related sysctl settings and so on.  
 
 ### Documentation
-Detailed docs are available [here](https://rlex.github.io/ansible-role-k3s/)
+Detailed docs are available **[here](https://k3s-docs.ujstor.com/)**
 
-### Requirements
-Apart from [what k3s requires](https://rancher.com/docs/k3s/latest/en/installation/installation-requirements/), this role also needs systemd, so it should work on any modern distro.  
+# Table of Contents
+1. [Run Ansible with Docker](#2-run-ansible-with-docker)
+2. [SSH Keys](#3-ssh-keys)
+3. [Run Playbooks](#4-run-playbooks)
+4. [Variables](#4-variables)
 
-### Variables
+## 1. Run Ansible with Docker
+[Back to Top](#table-of-contents)
+
+A Docker container is the best way to manage the Ansible configuration, dependencies  and to execute playbooks.
+
+Be sure to mount the SSH key that is responsible for host management.
+
+```bash
+docker build -t k3s-ansible .
+
+docker run --rm -it \
+  --mount type=bind,source="${HOME}"/.ssh/k3s_ansible_rsa.pem,destination=/root/.ssh/k3s_ansible_rsa.pem \
+  k3s-ansible bash
+
+source env/bin/activate
+```
+You are ready for executing playooks.
+
+If the configuration is changed, rebuilding the Docker image.
+
+## 2. SSH keys
+[Back to Top](#table-of-contents)
+
+SSH keys associated with nodes, when downloaded from RDM, are in OpenSSH format. They need to be converted into RSA format.
+
+If the servers do not share the same SSH key, each key needs to be specified in the hosts file as the ansible_ssh_private_key_file property.
+Otherwise, it should be defined in the .cfg config with private_key_file.
+Also, if you SSH into servers as a non-root user, you will need to define the users for SSH in the host inventory:
+
+```yaml
+[k3s_master]
+138.201.118.66 ansible_ssh_private_key_file: ~/.ssh/k3s_ansible_rsa ansible_user: administrator
+```
+
+A better approach is to have the same SSH key for the entire cluster.
+
+```yaml
+private_key_file = ~/.ssh/k3s_ansible_rsa
+```
+
+## 3. Run Playbooks
+[Back to Top](#table-of-contents)
+
+Host configuration is pulled from `hosts.ini`.
+
+```bash
+ansible-playbook k3s_playbook.yml
+```
+
+## 4. Variables
+[Back to Top](#table-of-contents)
 
 | Variable name                  | Default value                        | Description                                                                                                                          |
 | ------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| k3s_version                    | `v1.29.3+k3s1`                       | version of k3s to install                                                                                                            |
+| k3s_version                    | `v1.30.3+k3s1`                       | version of k3s to install                                                                                                            |
 | k3s_systemd_dir                | /etc/systemd/system                  | Directory for systemd unit file                                                                                                      |
 | k3s_master                     | `false`                              | installs k3s master when true                                                                                                        |
 | k3s_agent                      | `false`                              | installs k3s agent when true                                                                                                         |
@@ -49,7 +93,7 @@ Apart from [what k3s requires](https://rancher.com/docs/k3s/latest/en/installati
 | k3s_registries                 | ``                                   | Configures custom registries, see [official docs](https://rancher.com/docs/k3s/latest/en/installation/private-registry/) for format  |
 | k3s_cronjob_prune_images       | `absent`                             | Configures cronjob that prunes unused images in containerd daily. Either `absent` or `present`                                       |
 | k3s_gvisor                     | `false`                              | Installs [gvisor](https://gvisor.dev)                                                                                                |
-| k3s_gvisor_version             | `20231218`                           | gvisor version to install                                                                                                            |
+| k3s_gvisor_version             | `20240807`                           | gvisor version to install                                                                                                            |
 | k3s_gvisor_platform            | `systrap`                            | Selects [platform](https://gvisor.dev/docs/architecture_guide/platforms/) to use in gvisor                                           |
 | k3s_gvisor_config              | ``                                   | Sets additional options for gvisor runsc. See notes                                                                                  |
 | k3s_gvisor_create_runtimeclass | `true`                               | Automatically create gvisor RuntimeClass in kubernetes                                                                               |
@@ -64,21 +108,3 @@ Apart from [what k3s requires](https://rancher.com/docs/k3s/latest/en/installati
 | k3s_extra_config_files         | `{}`                                 | additional config files for kubelet/kubeapi                                                                                          |
 | k3s_sysctl_config              | `{}`                                 | Allows setting arbitrary sysctl settings                                                                                             |
 | k3s_extra_manifests            | `{}`                                 | Allows applying kubernetes manifests                                                                                                 |
-
-### Changelog
-Changelog is available in [separate file](https://github.com/rlex/ansible-role-k3s/blob/master/CHANGELOG.md)
-
-### Tests
-This role is continiously tested via ansible-molecule with github actions in on Ubuntu 22.04 and Rocky Linux 8 in different scenarios, including:
-  * single-node install
-  * single-node install with customized config
-  * single-node airgapped install
-  * cluster install (3 masters, 1 node)
-
-### Other ansible roles to check out
-
-If you got interested in that role, you might want to check out others that go nicely with my k3s one:
-
-* [haproxy by Oafenweb](https://github.com/Oefenweb/ansible-haproxy) - used in example with haproxy  
-* [keepalived by Oafenweb](https://github.com/Oefenweb/ansible-keepalived) - used in example with keepalived  
-* [zot registy by me](https://github.com/rlex/ansible-role-zot) - for light on resources (but also very powerful) OCI container registry  

@@ -5,3 +5,7 @@ collections:
   - name: kubernetes.core
     version: ">=3.0.0"
     source: https://galaxy.ansible.com
+  - name: ansible.posix
+    version: ">=1.5.4"
+    source: https://galaxy.ansible.com
+  - name: ansible.posix

@@ -1,0 +1,26 @@
+- name: k3s multi node - master
+  hosts: k3s_master
+  become: yes
+  become_user: root
+  gather_facts: False
+  roles:
+    - role: k3s
+  vars:
+    k3s_master: true
+    k3s_kubeconfig: true
+    k3s_master_extra_args:
+      - "--token alskdfjasljkfdlasjflakjsdflkj"
+      - metrics-server
+
+- name: k3s multi node - agent
+  hosts: k3s_agent
+  become: yes
+  become_user: root
+  gather_facts: False
+  roles:
+    - role: k3s
+  vars:
+    k3s_agent: true
+    k3s_agent_extra_args:
+      - "--server https://188.245.90.85:6443"
+      - "--token alskdfjasljkfdlasjflakjsdflkj"

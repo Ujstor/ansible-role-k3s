@@ -18,6 +18,9 @@ terraform.rc
 
 main.tf
 env/
+docs/
 ansible/
 fetch-data.sh
 data/
+
+.gitlab*
