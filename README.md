@@ -9,7 +9,7 @@ It can install gvisor, additional host dependencies, load specific kernel module
 Apart from [what k3s requires](https://rancher.com/docs/k3s/latest/en/installation/installation-requirements/), this role also needs systemd, so it should work on any modern distro.
 
 ### Documentation
-Detailed docs are available **[here](https://k3s-docs.ujstor.com/)**
+Detailed docs are available **[here](https://ujstor.github.io/ansible-role-k3s/)**
 
 # Table of Contents
 1. [Run Ansible with Docker](#2-run-ansible-with-docker)

@@ -1,7 +1,7 @@
 site_name: K3s Ansible Role
 site_description: Docs
 
-repo_url: https://git.dc.nuv.ntxzone.local/as/k3s-cluster-ansible/
+repo_url: https://github.com/Ujstor/ansible-role-k3s/
 edit_uri: edit/main/docs/docs
 
 theme:
