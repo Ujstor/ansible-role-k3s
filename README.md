@@ -8,7 +8,6 @@ It can install gvisor, additional host dependencies, load specific kernel module
 
 Apart from [what k3s requires](https://rancher.com/docs/k3s/latest/en/installation/installation-requirements/), this role also needs systemd, so it should work on any modern distro.
 
-
 ### Documentation
 Detailed docs are available **[here](https://k3s-docs.ujstor.com/)**
 
@@ -41,15 +40,13 @@ If the configuration is changed, rebuilding the Docker image.
 ## 2. SSH keys
 [Back to Top](#table-of-contents)
 
-SSH keys associated with nodes, when downloaded from RDM, are in OpenSSH format. They need to be converted into RSA format.
-
 If the servers do not share the same SSH key, each key needs to be specified in the hosts file as the ansible_ssh_private_key_file property.
 Otherwise, it should be defined in the .cfg config with private_key_file.
 Also, if you SSH into servers as a non-root user, you will need to define the users for SSH in the host inventory:
 
 ```yaml
 [k3s_master]
-138.201.118.66 ansible_ssh_private_key_file: ~/.ssh/k3s_ansible_rsa ansible_user: administrator
+138.201.118.66 ansible_ssh_private_key_file: ~/.ssh/k3s_ansible_rsa ansible_user: admin
 ```
 
 A better approach is to have the same SSH key for the entire cluster.
