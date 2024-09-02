@@ -16,8 +16,6 @@ override.tf.json
 terraform.rc
 .terraform*
 
-main.tf
 env/
 ansible/
-fetch-data.sh
 data/
